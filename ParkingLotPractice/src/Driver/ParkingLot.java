@@ -2,56 +2,53 @@ package Driver;
 
 import Entity.ParkingFloor;
 import Entity.ParkingSpot;
+import Entity.Ticket;
 import Entity.Vehicle;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ParkingLot {
-    private int lotId;
-    private List<ParkingFloor> floors ;
-    private Map<String,Vehicle> activeTicket;
+    private static ParkingLot instance;
 
-    public ParkingLot(int lotId, List<ParkingFloor> floors) {
-        this.lotId = lotId;
+    private final List<ParkingFloor> floors;
+    private final ConcurrentHashMap<String, Ticket> activeTickets = new ConcurrentHashMap<>();
+
+    private ParkingLot(List<ParkingFloor> floors) {
         this.floors = floors;
-        this.activeTicket = new HashMap<>();
     }
 
+    public static synchronized ParkingLot init(List<ParkingFloor> floors) {
+        if (instance == null) instance = new ParkingLot(floors);
+        return instance;
+    }
 
-    public ParkingSpot park(Vehicle vehicle){
-        for(ParkingFloor floor : floors){
-           return floor.parkVehicle(vehicle);
+    public static ParkingLot getInstance() {
+        return instance;
+    }
+
+    public ParkingSpot park(Vehicle vehicle) {
+        for (ParkingFloor floor : floors) {
+            ParkingSpot spot = floor.parkVehicle(vehicle);
+            if (spot != null) return spot;
         }
         return null;
     }
-    public void  unpark(ParkingSpot spot){
-        spot.unpark();
+
+    public void unpark(Ticket ticket) {
+        ticket.getSpot().unpark();
+        activeTickets.remove(ticket.getTicketId());
     }
 
-
-    public Map<String, Vehicle> getActiveTicket() {
-        return activeTicket;
+    public void addTicket(Ticket ticket) {
+        activeTickets.put(ticket.getTicketId(), ticket);
     }
 
-    public void setActiveTicket(String ticketNo,Vehicle vehicle) {
-        this.activeTicket.put(ticketNo,vehicle);
+    public Ticket getTicket(String ticketId) {
+        return activeTickets.get(ticketId);
     }
 
-    public int getLotId() {
-        return lotId;
-    }
-
-    public void setLotId(int lotId) {
-        this.lotId = lotId;
-    }
-
-    public List<ParkingFloor> getFloors() {
-        return floors;
-    }
-
-    public void setFloors(List<ParkingFloor> floors) {
-        this.floors = floors;
+    public int getActiveCount() {
+        return activeTickets.size();
     }
 }

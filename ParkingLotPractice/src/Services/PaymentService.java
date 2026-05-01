@@ -1,18 +1,16 @@
 package Services;
 
 import Entity.Ticket;
-import Strategy.IPaymentStategy;
+import Strategy.IPaymentStrategy;
 
 public class PaymentService {
-    private final Ticket ticket;
-    private final IPaymentStategy paymentStategy;
+    private final IPaymentStrategy paymentStrategy;
 
-    public PaymentService(Ticket ticket,IPaymentStategy paymentStategy){
-        this.ticket =ticket;
-        this.paymentStategy= paymentStategy;
+    public PaymentService(IPaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
     }
 
-    public double amount(){
-        return paymentStategy.calculatePayment(this.ticket);
+    public double calculateAmount(Ticket ticket) {
+        return paymentStrategy.calculatePayment(ticket);
     }
 }
