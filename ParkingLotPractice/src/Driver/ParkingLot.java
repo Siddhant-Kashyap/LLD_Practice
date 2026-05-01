@@ -23,6 +23,14 @@ public class ParkingLot {
         return instance;
     }
 
+    /**
+     * Resets the singleton instance. 
+     * IMPORTANT: Only for testing purposes to ensure test isolation.
+     */
+    public static synchronized void reset() {
+        instance = null;
+    }
+
     public static ParkingLot getInstance() {
         return instance;
     }
