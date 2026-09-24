@@ -16,7 +16,7 @@ public class QuestionService{
         this.questionRepository = questionRepository;
     }
 
-    public void createQuestion(User user, String title, String description, List<Tag> tags){
+    public Question createQuestion(User user, String title, String description, List<Tag> tags){
         if(user== null) throw new IllegalArgumentException("User can not be null");
         if(title==null || title.isBlank()){
             throw new IllegalArgumentException("Title can not be empty");
@@ -26,6 +26,7 @@ public class QuestionService{
             question.addTags(tag);
         }
         questionRepository.save(question);
+        return question;
     }
     public void acceptAnswer(
             User user,
@@ -40,8 +41,9 @@ public class QuestionService{
                     "Question not found"
             );
         }
+        if(question.getAuthor()!= user) throw new RuntimeException("You are not allowed");
 
-        question.acceptAnswer(user, answer);
+        question.acceptAnswer(answer,user);
     }
 
 }
