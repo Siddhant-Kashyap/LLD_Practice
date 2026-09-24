@@ -1,7 +1,9 @@
 package Entity;
 
+import Enums.VehicleType;
+
 public class Bike extends Vehicle{
-    public Bike(String plateNo, VehicleType vehicleType) {
-        super(plateNo, vehicleType);
+    public Bike(String plateNo) {
+        super(plateNo, VehicleType.BIKE);
     }
 }

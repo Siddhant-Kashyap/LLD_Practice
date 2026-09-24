@@ -1,7 +1,7 @@
-package Entity;
+package Enums;
 
 public enum VehicleType {
-    BIKE,
     BUS,
+    BIKE,
     CAR
 }

@@ -3,32 +3,38 @@ package Entity;
 import java.util.List;
 
 public class ParkingFloor {
-    public int floorId;
-    public List<ParkingSpot> parkingSpots;
-    public ParkingFloor(int floorId , List<ParkingSpot> parkingSpots){
+    private String floorId;
+    private List<ParkingSpot> spots ;
+
+    public ParkingFloor(String floorId, List<ParkingSpot> spots) {
         this.floorId = floorId;
-        this.parkingSpots = parkingSpots;
+        this.spots = spots;
     }
-    public ParkingSpot findAvailableParking(VehicleType vehicleType){
-        for(ParkingSpot spot:parkingSpots){
-            if(spot.spotType ==vehicleType && spot.isAvailable){
-                return spot;
+
+    public ParkingSpot findFreeSpot(Vehicle vehicle){
+        for(ParkingSpot s:spots){
+            if(s.canFit(vehicle)){
+                return  s;
             }
         }
         return null;
     }
-    public ParkingSpot parkVehicle(Vehicle vehicle) throws Exception {
-        ParkingSpot spot = findAvailableParking(vehicle.vehicleType);
-        if(spot!=null){
-            spot.park(vehicle);
-        }
-        return spot;
-    }
-    public  void  unparkVehicle(ParkingSpot spot) throws Exception {
-        if(spot.isAvailable){
-            throw  new Exception("Spot is already available");
-        }
-        spot.unpark();
 
+
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public List<ParkingSpot> getSpots() {
+        return spots;
+    }
+
+    public void setSpots(List<ParkingSpot> spots) {
+        this.spots = spots;
     }
 }

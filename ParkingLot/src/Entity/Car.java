@@ -1,8 +1,9 @@
 package Entity;
 
-public class Car extends Vehicle{
+import Enums.VehicleType;
 
-    public Car(String plateNo, VehicleType vehicleType) {
-        super(plateNo, vehicleType);
+public class Car extends Vehicle{
+    public Car(String plateNo) {
+        super(plateNo, VehicleType.CAR);
     }
 }

@@ -1,28 +1,57 @@
 package Entity;
 
-public class ParkingSpot {
-    public String spotId;
-    public VehicleType spotType;
-    public boolean isAvailable;
-    public Vehicle vehicle;
+import Enums.SlotType;
 
-    public ParkingSpot(String spotId, VehicleType spotType){
-        this.spotId = spotId;
-        this.spotType = spotType;
-        this.isAvailable = true;
-    }
-    public void park(Vehicle vehicle) throws Exception {
-        if(vehicle.vehicleType != this.spotType){
-            throw new Exception("Spot does not match vehicle type");
-        }
-        if(!this.isAvailable){
-            throw  new Exception("Spot is not available");
-        }
-        this.vehicle= vehicle;
-        this.isAvailable = false;
-    }
-    public void unpark(){
+public class ParkingSpot {
+    private String slotId;
+    private SlotType slotType;
+    private Vehicle vehicle;
+
+    public ParkingSpot(String slotId, SlotType slotType) {
+        this.slotId = slotId;
+        this.slotType = slotType;
         this.vehicle = null;
-        this.isAvailable = true;
+    }
+
+    public boolean canFit(Vehicle vehicle){
+        if(this.vehicle != null ) return false;
+        return vehicle.getVehicleType().name().equals(slotType.name());
+    }
+
+    public synchronized boolean park(Vehicle vehicle){
+        if(!canFit(vehicle)) return false;
+        this.vehicle = vehicle;
+        return true;
+    }
+
+    public synchronized boolean unpark(){
+        if(this.vehicle == null) return false;
+        this.vehicle = null;
+        return true;
+    }
+
+
+    public String getSlotId() {
+        return slotId;
+    }
+
+    public void setSlotId(String slotId) {
+        this.slotId = slotId;
+    }
+
+    public SlotType getSlotType() {
+        return slotType;
+    }
+
+    public void setSlotType(SlotType slotType) {
+        this.slotType = slotType;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 }
